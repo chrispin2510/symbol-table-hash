@@ -37,9 +37,10 @@ static data_t* probe(array_set_t* array_set, size_t capacity, data_t value)
  *  END
  ***********************************/
 
-void array_set_init(array_set_t *set)
+void array_set_init(array_set_t *set, size_t capacity)
 {
-    set->array = (data_t*)malloc(sizeof(data_t) * set->capacity); 
+    set->array = (data_t*)malloc(sizeof(data_t) * capacity); 
+    set->capacity = capacity;
 }
 
 void array_set_clear(array_set_t *set)
@@ -142,7 +143,7 @@ bool array_set_is_subset(array_set_t *set1, array_set_t *set2)
         {
             if (set1->array[index] != 0) 
             {
-                if (!array_set_contains(set2, set1->array[index]) == false)
+                if (array_set_contains(set2, set1->array[index]) == false)
                 {
                     flag = false;
                 }
@@ -180,7 +181,11 @@ bool array_set_is_equal(array_set_t *set1, array_set_t *set2)
     bool flag = true;
     size_t index1 = 0, index2 = 0;
 
-    if (set1->size == set2->size)
+    if (set1->size != set2->size)
+    {
+        flag = false;
+    }
+    else
     {
         while (index1 <= set1->capacity && index2 <= set2->capacity && flag == true)
         {
@@ -281,7 +286,7 @@ void array_set_union(array_set_t *dest, array_set_t *set1, array_set_t *set2)
     {
         if (set1->array[index1] != 0 && !(array_set_contains(dest, set1->array[index1])))
         {
-            index = array_set_contains(set1->array[index1], dest->capacity);
+            index = hash_address(set1->array[index1], dest->capacity);
             dest->array[index] = set1->array[index1++];
         }
     }
@@ -290,13 +295,13 @@ void array_set_union(array_set_t *dest, array_set_t *set1, array_set_t *set2)
     {
         if (set2->array[index2] != 0 && !(array_set_contains(dest, set1->array[index1])))
         {
-            index = array_set_contains(set2->array[index2], dest->capacity);
+            index = hash_address(set2->array[index2], dest->capacity);
             dest->array[index] = set2->array[index1++];
         }
     }
 }
 
-void array_set_intersection(array_set_t *dest, array_set_t *set1, array_set_t *set2)
+void array_set_intersect(array_set_t *dest, array_set_t *set1, array_set_t *set2)
 {
     size_t index1 = 0, index2 = 0, index = 0;
 
@@ -346,7 +351,9 @@ void array_set_diff(array_set_t *dest, array_set_t *set1, array_set_t *set2)
 void array_set_sym_diff(array_set_t *dest, array_set_t *set1, array_set_t *set2)
 {
     array_set_t* dest_aux = (array_set_t*)malloc(sizeof(array_set_t));
-    dest_aux->array = (data_t*)malloc(sizeof(data_t) * dest->capacity);
+    dest_aux->capacity = dest->capacity;
+    dest_aux->size = 0;
+    array_set_init(dest_aux, dest->capacity);
 
     array_set_intersect(dest_aux, set1, set2);
     array_set_union(dest, set1, set2);

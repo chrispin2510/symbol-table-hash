@@ -26,7 +26,7 @@ typedef int data_t;
 typedef struct skip_node {
     data_t data;
     size_t height;
-    struct skip_node **next;
+    struct skip_node *next;
 } skip_node_t;
 
 typedef struct skip_set {
@@ -45,7 +45,7 @@ typedef skip_node_t* skip_set_iter_t;
 /*
  * Initializes a new empty set.
  */
-void skip_set_init(skip_set_t *set);
+void skip_set_init(skip_set_t *set, size_t max_height);
 
 /**
  * Removes all elements from a set.

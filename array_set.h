@@ -39,7 +39,7 @@ typedef data_t* array_set_iter_t;
 /*
  * Initializes a new empty set.
  */
-void array_set_init(array_set_t *set);
+void array_set_init(array_set_t *set, size_t capacity);
 
 /**
  * Removes all elements from a set (doesn't deallocate anything!).

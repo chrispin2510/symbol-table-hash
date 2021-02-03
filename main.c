@@ -26,26 +26,26 @@ void run_benchmark(int input_size)
     array_set_t array_set;
     skip_set_t  skip_set;
     hash_set_t  hash_set;
-    array_set_init(&array_set);
-    skip_set_init (&skip_set);
+    array_set_init(&array_set, (size_t)input_size);
+//   skip_set_init (&skip_set, (size_t)input_size);
     hash_set_init (&hash_set);
 
     clock_t begin, end;
     printf("\n");
 
-    // test add method
+    //  test add method
     begin = clock();
     for (int i=0; i<input_size; i++) {
         array_set_add(&array_set, input[i]);
     }
     end = clock();
     printf(fmt, "ARRAY", "ADD", input_size, TIME_DIFF);
-    begin = clock();
-    for (int i=0; i<input_size; i++) {
-        skip_set_add(&skip_set, input[i]);
-    }
-    end = clock();
-    printf(fmt, "SKIP", "ADD", input_size, TIME_DIFF);
+    //begin = clock();
+    //for (int i=0; i<input_size; i++) {
+        //skip_set_add(&skip_set, input[i]);
+    //}
+    //end = clock();
+    //printf(fmt, "SKIP", "ADD", input_size, TIME_DIFF);
     begin = clock();
     for (int i=0; i<input_size; i++) {
         hash_set_add(&hash_set, input[i]);
@@ -60,12 +60,12 @@ void run_benchmark(int input_size)
     }
     end = clock();
     printf(fmt, "ARRAY", "CONTAINS", input_size, TIME_DIFF);
-    begin = clock();
-    for (int i=0; i<input_size; i++) {
-        skip_set_contains(&skip_set, i);
-    }
-    end = clock();
-    printf(fmt, "SKIP", "CONTAINS", input_size, TIME_DIFF);
+    //begin = clock();
+    //for (int i=0; i<input_size; i++) {
+        //skip_set_contains(&skip_set, i);
+    //}
+    //end = clock();
+    //printf(fmt, "SKIP", "CONTAINS", input_size, TIME_DIFF);
     begin = clock();
     for (int i=0; i<input_size; i++) {
         hash_set_contains(&hash_set, i);
@@ -75,7 +75,7 @@ void run_benchmark(int input_size)
 
     // free memory
     array_set_free(&array_set);
-    skip_set_free (&skip_set);
+    //skip_set_free (&skip_set);
     hash_set_free (&hash_set);
     free(input);
 }
